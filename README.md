@@ -1,3 +1,8 @@
+vue-cli3
+vue2
+vue-apollo3
+vuex3
+
 # antd-demo-vue2
 
 ## Project setup

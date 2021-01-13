@@ -1,42 +1,86 @@
 <template>
   <div class="hello">
+    <button @click="handleGet()">点击获取</button>
+    <div>这是真的 {{ test2 }}</div>
     <h1>{{ msg }}</h1>
-    <p>
-      For a guide and recipes on how to configure / customize this project,<br>
-      check out the
-      <a href="https://cli.vuejs.org" target="_blank" rel="noopener">vue-cli documentation</a>.
-    </p>
-    <h3>Installed CLI Plugins</h3>
-    <ul>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-babel" target="_blank" rel="noopener">babel</a></li>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-eslint" target="_blank" rel="noopener">eslint</a></li>
-    </ul>
-    <h3>Essential Links</h3>
-    <ul>
-      <li><a href="https://vuejs.org" target="_blank" rel="noopener">Core Docs</a></li>
-      <li><a href="https://forum.vuejs.org" target="_blank" rel="noopener">Forum</a></li>
-      <li><a href="https://chat.vuejs.org" target="_blank" rel="noopener">Community Chat</a></li>
-      <li><a href="https://twitter.com/vuejs" target="_blank" rel="noopener">Twitter</a></li>
-      <li><a href="https://news.vuejs.org" target="_blank" rel="noopener">News</a></li>
-    </ul>
-    <h3>Ecosystem</h3>
-    <ul>
-      <li><a href="https://router.vuejs.org" target="_blank" rel="noopener">vue-router</a></li>
-      <li><a href="https://vuex.vuejs.org" target="_blank" rel="noopener">vuex</a></li>
-      <li><a href="https://github.com/vuejs/vue-devtools#vue-devtools" target="_blank" rel="noopener">vue-devtools</a></li>
-      <li><a href="https://vue-loader.vuejs.org" target="_blank" rel="noopener">vue-loader</a></li>
-      <li><a href="https://github.com/vuejs/awesome-vue" target="_blank" rel="noopener">awesome-vue</a></li>
-    </ul>
+    <button @click="handleTest()">点击测试</button>
   </div>
 </template>
 
 <script>
+import gql from "../apollo/apollo";
+import { set_fetchPolicyStatus, http_query_interceptor } from "../vue-apollo";
 export default {
-  name: 'HelloWorld',
+  name: "HelloWorld",
   props: {
-    msg: String
-  }
-}
+    msg: String,
+  },
+  data() {
+    return {
+      test2: "222",
+    };
+  },
+
+  methods: {
+    handleGet() {
+      const obj_gql = {
+        // query: gql.GET_WEB_BANNERS,
+        // variables: {
+        //   locationKey: "homePageWebBannerConfig",
+        //   distributionPlatform: "PC",
+        //   cubeListCategory: "DISCOVERY",
+        //   type: "ALBUM",
+        //   page: 1,
+        //   pageSize: 9,
+        // },
+
+        query: gql.GET_USER_DETAIL,
+        variables: {
+          infoType: 1,
+          userId: "4329705",
+        },
+      };
+      const val = http_query_interceptor(this, obj_gql).then((res) => {
+        console.log("/=/这样获取结果222：", res);
+      });
+      console.log("/=/这样获取结果：", val);
+      // this.$apollo
+      //   .query({
+      //     // query: gql.GET_WEB_BANNERS,
+      //     // variables: {
+      //     //   locationKey: "homePageWebBannerConfig",
+      //     //   distributionPlatform: "PC",
+      //     //   cubeListCategory: "DISCOVERY",
+      //     //   type: "ALBUM",
+      //     //   page: 1,
+      //     //   pageSize: 9,
+      //     // },
+
+      //     query: gql.GET_USER_DETAIL,
+      //     variables: {
+      //       infoType: 1,
+      //       userId: "4329705",
+      //     },
+      //   })
+      //   .then((res) => {
+      //     console.log("/=/成功1:", res);
+      //   })
+      //   .catch((err) => {
+      //     console.log("/=/erCUO错误:", err);
+      //   });
+    },
+    handleTest() {
+      set_fetchPolicyStatus(this, "no-cache");
+      console.log("/=/打印测试:", this.$apollo);
+      // this.$apollo.provider.clients.defaultClient.defaultOptions = {
+      // this.$apollo.provider.defaultClient.defaultOptions = {
+      //   query: {
+      //     fetchPolicy: "no-cache", //  'network-only'  // 'cache-and-network',
+      //   },
+      // };
+    },
+  },
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
